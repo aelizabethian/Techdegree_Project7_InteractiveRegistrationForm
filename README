@@ -30,6 +30,10 @@ RESPONSE - I programmed  two credit card error messages. If they included charac
 error, that one took precedence. That message disappeared after they removed the characters. Then they got the other error message if they had numbers but not enough of them. Basically, I triggered that if they had at least two characters
 down so it wasn't triggered immediately.
 
+PLEASE NOTE that the regex I used was for a real credit card validation and so I would (after this assignment) re-do the error message to read 'please enter a
+valid credit card number' after form submission as this is more indicative of what the validation is picking up. The 13-digit - 16 digit error message doesn't quite cover
+what this is validating. Plus, it wouldn't overlap so much with the real-time error message regarding length.
+
 
 
 INSTRUCTION - Ideally, we want to prevent users from selecting activities that occur at the same time.
