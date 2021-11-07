@@ -109,6 +109,12 @@ const zip = document.querySelector("#zip");
 const CVV = document.querySelector("#cvv");
 const form = document.querySelector("form");
 const indActivity = document.querySelectorAll("input[type='checkbox']");
+//Adding a warning hint to the activities box since one isn't there
+const activityHint = document.createElement("span");
+activityHint.innerHTML = "You need to choose at least one activity";
+activityHint.style.display = "none";
+activityHint.style.color = "red";
+activities.append(activityHint);
 
 form.addEventListener("submit", (e) => {
   const nameValue = nameField.value;
@@ -145,16 +151,19 @@ form.addEventListener("submit", (e) => {
   for (let i = 0; i < indActivity.length; i++) {
     if (indActivity[i].checked) {
       checked = true;
-      console.log(indActivity[i].checked);
+      console.log(checked);
       break;
     }
   }
+
   if (checked === false) {
     e.preventDefault();
-    const hint = document.createElement("span");
-    hint.innerHTML = "You need to choose at least one activity";
-    hint.style.color = "red";
-    activities.append(hint);
+    activityHint.style.display = "block";
+  }
+
+  if (checked === true) {
+    e.preventDefault();
+    activityHint.style.display = "none";
   }
 
   //The remaining section is for credit card and associated values
@@ -196,7 +205,7 @@ form.addEventListener("submit", (e) => {
     }
 
     const cvvValue = CVV.value;
-    const cvvIsValid = /^[0-9]{3,4}$/.test(cvvValue);
+    const cvvIsValid = /^[0-9]{3}$/.test(cvvValue);
 
     if (!cvvIsValid) {
       CVV.parentNode.classList.add("not-valid");
