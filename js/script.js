@@ -52,7 +52,7 @@ let total = 0;
 activities.addEventListener("change", (e) => {
   const target = e.target;
   const dataCost = parseInt(target.getAttribute("data-cost"));
-  console.log(target, dataCost);
+
   if (target.checked) {
     total += dataCost;
   }
@@ -61,8 +61,6 @@ activities.addEventListener("change", (e) => {
   }
   totalDisplay.innerHTML = `Total: $${total}`;
 });
-
-//Prevent users from registering for multiple activities that conflict
 
 //_________________________________________
 //Setting the payment systems so that the preferred is displayed, and the rest hidden
@@ -100,6 +98,8 @@ payOptions.addEventListener("change", (e) => {
 
 //__________________
 //Form validation to make sure everything is filled out correctly.
+//Name has to filled out, email has to be filled out correctly, credit, zip, CVV
+
 //Accessibility notices included when an entry is invalid
 
 const nameField = document.querySelector("#name");
@@ -108,6 +108,7 @@ const creditCardNo = document.querySelector("#cc-num");
 const zip = document.querySelector("#zip");
 const CVV = document.querySelector("#cvv");
 const form = document.querySelector("form");
+const indActivity = document.querySelectorAll("input[type='checkbox']");
 
 form.addEventListener("submit", (e) => {
   const nameValue = nameField.value;
@@ -138,11 +139,34 @@ form.addEventListener("submit", (e) => {
     document.querySelector("#email-hint").style.display = "none";
   }
 
+  //This small section is to make sure the user has to check AT LEAST ONE activity. I also added a warning snippet at the bottom since there wasn't one yet.
+  let checked = false;
+
+  for (let i = 0; i < indActivity.length; i++) {
+    if (indActivity[i].checked) {
+      checked = true;
+      console.log(indActivity[i].checked);
+      break;
+    }
+  }
+  if (checked === false) {
+    e.preventDefault();
+    const hint = document.createElement("span");
+    hint.innerHTML = "You need to choose at least one activity";
+    hint.style.color = "red";
+    activities.append(hint);
+  }
+
+  //The remaining section is for credit card and associated values
+
   if (creditCardNo) {
     const creditCardNoValue = creditCardNo.value;
     let creditCardNoValueNoSpace = creditCardNoValue.replace(/ /g, "").trim();
 
-    //This regex from https://gist.github.com/hto/060a1d3df81929eedd51799b160b79c8
+    /*This regex from https://gist.github.com/hto/060a1d3df81929eedd51799b160b79c8.  FYI - for testing, this won't accept gibberish that is just 13 chars long. Wanted to
+  make this as 'real' as possible. I'll likely change the HTML hint to 'make sure this is a valid card later'.
+  Also note that this same regext is used again below for real-time error messaging.*/
+
     const creditIsValid =
       /4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|6(?:011|5[0-9]{2})[0-9]{12}|(?:2131|1800|35\d{3})\d{11}$/.test(
         creditCardNoValueNoSpace
@@ -180,7 +204,7 @@ form.addEventListener("submit", (e) => {
       document.querySelector("#cvv-hint").style.display = "block";
     } else if (cvvIsValid) {
       CVV.parentNode.classList.remove("not-valid");
-      ziCVVp.classList.add("valid");
+      CVV.classList.add("valid");
       document.querySelector("#cvv-hint").style.display = "none";
     }
 
@@ -194,8 +218,8 @@ form.addEventListener("submit", (e) => {
 //Accessibility
 
 //identifying individual activities and then will loop over to listen for a focus event
-const indActivity = document.querySelectorAll("input[type='checkbox']");
-console.log(indActivity);
+//IndActivity declared higher up in the code - in form validation
+
 for (let i = 0; i < indActivity.length; i++) {
   indActivity[i].addEventListener("focus", () => {
     indActivity[i].parentNode.className += "focus";
@@ -260,10 +284,10 @@ email.addEventListener("keyup", () => {
     if (emailValue.includes("@")) {
       input.style.display = "none";
     }
-  }
 
-  if (emailIsValid) {
-    input.style.display = "none";
+    if (emailIsValid) {
+      input.style.display = "none";
+    }
   }
 });
 
@@ -286,7 +310,6 @@ creditCardNo.addEventListener("keyup", () => {
   const creditCardNoValue = creditCardNo.value;
   let creditCardNoValueNoSpace = creditCardNoValue.replace(/ /g, "").trim();
 
-  //This regex from https://gist.github.com/hto/060a1d3df81929eedd51799b160b79c8
   const creditIsValid =
     /4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|6(?:011|5[0-9]{2})[0-9]{12}|(?:2131|1800|35\d{3})\d{11}$/.test(
       creditCardNoValueNoSpace
