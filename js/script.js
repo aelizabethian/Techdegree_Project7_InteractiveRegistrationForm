@@ -151,7 +151,6 @@ form.addEventListener("submit", (e) => {
   for (let i = 0; i < indActivity.length; i++) {
     if (indActivity[i].checked) {
       checked = true;
-      console.log(checked);
       break;
     }
   }
@@ -162,7 +161,6 @@ form.addEventListener("submit", (e) => {
   }
 
   if (checked === true) {
-    e.preventDefault();
     activityHint.style.display = "none";
   }
 
