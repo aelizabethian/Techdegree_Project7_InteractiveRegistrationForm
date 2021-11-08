@@ -109,12 +109,7 @@ const zip = document.querySelector("#zip");
 const CVV = document.querySelector("#cvv");
 const form = document.querySelector("form");
 const indActivity = document.querySelectorAll("input[type='checkbox']");
-//Adding a warning hint to the activities box since one isn't there
-const activityHint = document.createElement("span");
-activityHint.innerHTML = "You need to choose at least one activity";
-activityHint.style.display = "none";
-activityHint.style.color = "red";
-activities.append(activityHint);
+const activityBox = document.querySelector("#activities-box");
 
 form.addEventListener("submit", (e) => {
   const nameValue = nameField.value;
@@ -123,11 +118,11 @@ form.addEventListener("submit", (e) => {
   if (!nameIsValid) {
     e.preventDefault();
     nameField.parentNode.classList.add("not-valid");
-    nameField.classList.remove("valid");
+    nameField.parentNode.classList.remove("valid");
     document.querySelector("#name-hint").style.display = "block";
   } else if (nameIsValid) {
     nameField.parentNode.classList.remove("not-valid");
-    nameField.classList.add("valid");
+    nameField.parentNode.classList.add("valid");
     document.querySelector("#name-hint").style.display = "none";
   }
 
@@ -137,11 +132,11 @@ form.addEventListener("submit", (e) => {
   if (!emailIsValid) {
     e.preventDefault();
     email.parentNode.classList.add("not-valid");
-    email.classList.remove("valid");
+    email.parentNode.classList.remove("valid");
     document.querySelector("#email-hint").style.display = "block";
   } else if (emailIsValid) {
     email.parentNode.classList.remove("not-valid");
-    email.classList.add("valid");
+    email.parentNode.classList.add("valid");
     document.querySelector("#email-hint").style.display = "none";
   }
 
@@ -151,22 +146,27 @@ form.addEventListener("submit", (e) => {
   for (let i = 0; i < indActivity.length; i++) {
     if (indActivity[i].checked) {
       checked = true;
+      document.querySelector("#activities-hint").style.display = "none";
+      activities.classList.add("valid");
       break;
     }
   }
 
   if (checked === false) {
     e.preventDefault();
-    activityHint.style.display = "block";
+    document.querySelector("#activities-hint").style.display = "block";
+    activities.classList.add("not-valid");
   }
 
   if (checked === true) {
-    activityHint.style.display = "none";
+    activities.classList.remove("not-valid");
+    activities.classList.add("valid");
+    document.querySelector("#activities-hint").style.display = "none";
   }
 
   //The remaining section is for credit card and associated values
 
-  if (creditCardNo) {
+  if (payOptions.value === "credit-card") {
     const creditCardNoValue = creditCardNo.value;
     let creditCardNoValueNoSpace = creditCardNoValue.replace(/ /g, "").trim();
 
@@ -181,11 +181,11 @@ form.addEventListener("submit", (e) => {
 
     if (!creditIsValid) {
       creditCardNo.parentNode.classList.add("not-valid");
-      creditCardNo.classList.remove("valid");
+      creditCardNo.parentNode.classList.remove("valid");
       document.querySelector("#cc-hint").style.display = "block";
     } else if (creditIsValid) {
       creditCardNo.parentNode.classList.remove("not-valid");
-      creditCardNo.classList.add("valid");
+      creditCardNo.parentNode.classList.add("valid");
       document.querySelector("#cc-hint").style.display = "none";
     }
 
@@ -194,11 +194,11 @@ form.addEventListener("submit", (e) => {
 
     if (!zipIsValid) {
       zip.parentNode.classList.add("not-valid");
-      zip.classList.remove("valid");
+      zip.parentNode.classList.remove("valid");
       document.querySelector("#zip-hint").style.display = "block";
     } else if (zipIsValid) {
       zip.parentNode.classList.remove("not-valid");
-      zip.classList.add("valid");
+      zip.parentNode.classList.add("valid");
       document.querySelector("#zip-hint").style.display = "none";
     }
 
@@ -207,11 +207,11 @@ form.addEventListener("submit", (e) => {
 
     if (!cvvIsValid) {
       CVV.parentNode.classList.add("not-valid");
-      CVV.classList.remove("valid");
+      CVV.parentNode.classList.remove("valid");
       document.querySelector("#cvv-hint").style.display = "block";
     } else if (cvvIsValid) {
       CVV.parentNode.classList.remove("not-valid");
-      CVV.classList.add("valid");
+      CVV.parentNode.classList.add("valid");
       document.querySelector("#cvv-hint").style.display = "none";
     }
 
